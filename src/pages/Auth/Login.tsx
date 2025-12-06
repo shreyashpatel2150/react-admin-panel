@@ -3,10 +3,31 @@ import AuthLayout from "../Layout/AuthLayout";
 import FormInput from "../../components/Form/FormInput";
 import Button from "../../components/buttons/Button";
 import useFormInput from "../../hooks/useFormInput";
+import { useLoginMutation } from "../../apis/AuthApi";
+import { FormEvent } from "react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
 
 const Login = () => {
+    const { updateUser } = useAuth();
+    const navigate = useNavigate();
+
     const email = useFormInput('');
     const password = useFormInput('');
+
+    const [login] = useLoginMutation();
+
+    const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const result = await login({ email: email.value, password: password.value }).unwrap();
+        
+        console.log('Login Result:', result);
+        localStorage.setItem("token", result.data?.token);
+        updateUser(result.data?.user)
+        navigate("/");
+    };
+        
+
     return (
         <AuthLayout>
             <PageMeta title="Login" />
@@ -22,7 +43,7 @@ const Login = () => {
                             </p>
                         </div>
                         <div>
-                            <form>
+                            <form onSubmit={handleLogin}>
                                 <div className="space-y-6">
                                     <div>
                                         <FormInput label="Email" type="text" required={true} placeholder="abc@example.com" {...email.bind} />
