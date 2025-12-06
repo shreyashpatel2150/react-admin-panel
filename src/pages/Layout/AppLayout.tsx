@@ -4,9 +4,16 @@ import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
 import PageBreadcrumb from "../common/PageBreadCrumb";
+import { useAuth } from "../../context/AuthContext";
+import { useEffect } from "react";
 
 const LayoutContent: React.FC = () => {
     const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+    const { refreshUser } = useAuth();
+
+    useEffect(() => {
+        refreshUser();
+    }, []);
 
     return (
         <div className="min-h-screen xl:flex">

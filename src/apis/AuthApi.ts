@@ -1,7 +1,7 @@
+import { LoginResponse } from '../interfaces/LoginResponse';
 import api from './Api'
 
 type LoginRequest = { email: string; password: string }
-type LoginResponse = { token?: string } & Record<string, unknown>
 
 export const authApi = api.injectEndpoints({
     endpoints: (builder) => ({

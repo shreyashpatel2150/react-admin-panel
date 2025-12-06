@@ -7,6 +7,7 @@ import { useLoginMutation } from "../../apis/AuthApi";
 import { FormEvent } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
+import { LoginResponse } from "../../interfaces/LoginResponse";
 
 const Login = () => {
     const { updateUser } = useAuth();
@@ -19,11 +20,10 @@ const Login = () => {
 
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const result = await login({ email: email.value, password: password.value }).unwrap();
+        const result: LoginResponse = await login({ email: email.value, password: password.value }).unwrap();
         
-        console.log('Login Result:', result);
-        localStorage.setItem("token", result.data?.token);
-        updateUser(result.data?.user)
+        localStorage.setItem("token", result.token);
+        updateUser(result.user);
         navigate("/");
     };
         

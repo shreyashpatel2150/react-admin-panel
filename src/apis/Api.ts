@@ -29,7 +29,11 @@ const baseQueryWithErrorHandler = async (args: FetchArgs, api: BaseQueryApi, ext
     const result = await baseQuery(args, api, extraOptions)
     if (result.error) {
         const errorMessage: string = handleHttpStatusCodeError(result.error)
-        showErrorAlert(errorMessage)
+        showErrorAlert(errorMessage, () => {
+            if (result.error && (result.error.status === 401 || result.error.status === 403)) {
+                window.location.href = '/login'
+            }
+        })
         return Promise.reject(errorMessage)
     }
 
