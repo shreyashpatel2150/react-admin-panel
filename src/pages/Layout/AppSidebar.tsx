@@ -38,7 +38,17 @@ const AppSidebar: React.FC = () => {
     const subMenuRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
     const isActive = useCallback(
-        (path: string) => location.pathname === path,
+        (path: string) => {
+            // normalize remove trailing slash (except for root)
+            const normalize = (p: string) => (p !== '/' && p.endsWith('/') ? p.replace(/\/+$/, '') : p);
+            const current = normalize(location.pathname);
+            const target = normalize(path);
+
+            if (target === '/') return current === '/';
+
+            // Exact match or a sub-route (starts with '/target/')
+            return current === target || current.startsWith(`${target}/`);
+        },
         [location.pathname]
     );
 

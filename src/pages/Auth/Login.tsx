@@ -1,4 +1,5 @@
 import PageMeta from "../common/PageMeta";
+import usePageMeta from "../../hooks/usePageMeta";
 import AuthLayout from "../Layout/AuthLayout";
 import FormInput from "../../components/Form/FormInput";
 import Button from "../../components/buttons/Button";
@@ -18,6 +19,8 @@ const Login = () => {
 
     const [login] = useLoginMutation();
 
+    usePageMeta({ meta: { title: 'Login', description: 'Sign in to admin' } });
+
     const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const result: LoginResponse = await login({ email: email.value, password: password.value }).unwrap();
@@ -30,7 +33,7 @@ const Login = () => {
 
     return (
         <AuthLayout>
-            <PageMeta title="Login" />
+            <PageMeta />
             <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2 no-scrollbar">
                 <div className="flex flex-col justify-center flex-1 w-full max-w-md mx-auto">
                     <div>

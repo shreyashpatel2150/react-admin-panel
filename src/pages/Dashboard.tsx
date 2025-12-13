@@ -1,31 +1,13 @@
-import { useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
+import usePageMeta from "../hooks/usePageMeta";
 
 export default function Dashboard() {
-    const { setPageMeta, setPageDetails, defaultBreadcrumbs } = useAppContext();
-    
-        useEffect(() => {
-            setPageMeta({
-                title: "Dashboard",
-                description: ""
-            });
-    
-            return () => setPageMeta({ title: "Admin Panel", description: "" });
-        }, []);
-    
-        useEffect(() => {
-            setPageDetails({
-                pageTitle: "Dashboard",
-                breadcrumbs: [
-                    ...defaultBreadcrumbs,
-                ]
-            });
-    
-            return () => setPageDetails({
-                pageTitle: "",
-                breadcrumbs: defaultBreadcrumbs
-            });
-        }, []);
+    const { defaultBreadcrumbs } = useAppContext();
+
+    usePageMeta({
+        meta: { title: 'Dashboard', description: '' },
+        details: { pageTitle: 'Dashboard', breadcrumbs: [...defaultBreadcrumbs] }
+    });
     return (
         <div>
             Dashboard Page Content
