@@ -8,6 +8,7 @@ type AuthContextType = {
     updateUser: (userData: UserInterface) => void
     refreshUser: () => void
     isLoadingUser: boolean
+    logout: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -37,8 +38,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
     }
 
+    const logout = () => {
+        localStorage.removeItem('token')
+        setUser(null)
+
+        // need to make api call to destroy server session
+    }
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, updateUser, refreshUser, isLoadingUser }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, updateUser, refreshUser, isLoadingUser, logout }}>
             {children}
         </AuthContext.Provider>
     )

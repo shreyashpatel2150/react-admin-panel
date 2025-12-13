@@ -8,7 +8,7 @@ export const UserDropdown: React.FC = () => {
     const toggleDropdown = () => setIsOpen(!isOpen);
     const closeDropdown = () => setIsOpen(false);
 
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
 
     return (
         <div className="relative">
@@ -80,7 +80,8 @@ export const UserDropdown: React.FC = () => {
                     </li>
                 </ul>
                 <span
-                    className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
+                    className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300 cursor-pointer"
+                    onClick={() => logout()}
                 >
                     <svg
                         className="fill-gray-500 group-hover:fill-gray-700 dark:group-hover:fill-gray-300"
