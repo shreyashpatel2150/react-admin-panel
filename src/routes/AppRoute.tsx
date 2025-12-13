@@ -4,6 +4,7 @@ import AuthGuard from "./AuthGuard";
 import AppLayout from "../pages/Layout/AppLayout";
 import Dashboard from "../pages/Dashboard";
 import NotFound from "../pages/otherPages/Notfound";
+import { User } from "../pages/users/User";
 
 const AppRoute = () => {
     return (
@@ -13,6 +14,7 @@ const AppRoute = () => {
                 <AuthGuard><AppLayout /></AuthGuard>
             }>
                 <Route path="/" index element={<Dashboard />} />
+                <Route path="/user" element={<User />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

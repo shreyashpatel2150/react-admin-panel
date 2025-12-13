@@ -1,17 +1,34 @@
-import PageMeta from "./common/PageMeta";
+import { useEffect } from "react";
+import { useAppContext } from "../context/AppContext";
 
 export default function Dashboard() {
+    const { setPageMeta, setPageDetails, defaultBreadcrumbs } = useAppContext();
+    
+        useEffect(() => {
+            setPageMeta({
+                title: "Dashboard",
+                description: ""
+            });
+    
+            return () => setPageMeta({ title: "Admin Panel", description: "" });
+        }, []);
+    
+        useEffect(() => {
+            setPageDetails({
+                pageTitle: "Dashboard",
+                breadcrumbs: [
+                    ...defaultBreadcrumbs,
+                ]
+            });
+    
+            return () => setPageDetails({
+                pageTitle: "",
+                breadcrumbs: defaultBreadcrumbs
+            });
+        }, []);
     return (
         <div>
-            <PageMeta
-                title="Dashboard"
-                description="Dashboard"
-            />
-            <div className="grid grid-cols-12 gap-4 md:gap-6">
-                <div className="col-span-12 space-y-6 xl:col-span-7">
-                    Dashboard
-                </div>
-            </div>
+            Dashboard Page Content
         </div>
     );
 }

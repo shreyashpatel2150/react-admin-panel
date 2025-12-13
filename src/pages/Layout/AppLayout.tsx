@@ -6,6 +6,7 @@ import AppSidebar from "./AppSidebar";
 import PageBreadcrumb from "../common/PageBreadCrumb";
 import { useAuth } from "../../context/AuthContext";
 import { useEffect } from "react";
+import PageMeta from "../common/PageMeta";
 
 const LayoutContent: React.FC = () => {
     const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -28,7 +29,9 @@ const LayoutContent: React.FC = () => {
             >
                 <AppHeader />
                 <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
-                    <PageBreadcrumb pageTitle='Dashboard' />
+                    <PageBreadcrumb />
+                    <PageMeta />
+
                     <Outlet />
                 </div>
             </div>
