@@ -14,8 +14,8 @@ const Login = () => {
     const { updateUser } = useAuth();
     const navigate = useNavigate();
 
-    const email = useFormInput('');
-    const password = useFormInput('');
+    const email = useFormInput<string>('', v=>v);
+    const password = useFormInput<string>('', v=>v);
 
     const [login] = useLoginMutation();
 
@@ -55,7 +55,7 @@ const Login = () => {
                                         <FormInput label="Password" type="password" required={true} placeholder="******" {...password.bind} />
                                     </div>
                                     <div>
-                                        <Button className="w-full">Sign In</Button>
+                                        <Button className="w-full" type="submit">Sign In</Button>
                                     </div>
                                 </div>
                             </form>

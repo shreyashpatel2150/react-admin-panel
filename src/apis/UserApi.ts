@@ -1,4 +1,6 @@
+import { NewUserInterface } from "../interfaces/NewUserInterface";
 import { UserInterface } from "../interfaces/UserInterface";
+import { attachToFormData } from "../utils/misc";
 import api from "./Api";
 
 const userApi = api.injectEndpoints({
@@ -8,8 +10,15 @@ const userApi = api.injectEndpoints({
                 url: '/user',
             }),
         }),
+        createUser: builder.mutation<void, NewUserInterface>({
+            query: (payload) => ({
+               url: '/users',
+               method: 'POST',
+               body: attachToFormData(payload)
+            })
+        })
     }),
     overrideExisting: false,
 });
 
-export const { useGetUserQuery, useLazyGetUserQuery } = userApi;
+export const { useGetUserQuery, useLazyGetUserQuery, useCreateUserMutation } = userApi;

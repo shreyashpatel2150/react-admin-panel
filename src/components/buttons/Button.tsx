@@ -9,6 +9,8 @@ interface ButtonProps {
     onClick?: () => void; // Click handler
     disabled?: boolean; // Disabled state
     className?: string; // Disabled state
+    type?: "button" | "submit" | "reset" | undefined;
+    isBusy?: boolean; // Loading state
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -20,6 +22,8 @@ const Button: React.FC<ButtonProps> = ({
     onClick,
     className = "",
     disabled = false,
+    type="button",
+    isBusy = false
 }) => {
     // Size Classes
     const sizeClasses = {
@@ -44,10 +48,22 @@ const Button: React.FC<ButtonProps> = ({
             }`}
             onClick={onClick}
             disabled={disabled}
+            type={type}
         >
-            {startIcon && <span className="flex items-center">{startIcon}</span>}
-            {children}
-            {endIcon && <span className="flex items-center">{endIcon}</span>}
+            {isBusy && (
+                <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.046.996 5.867 2.678 8.159l-.678-.678z"></path>
+                </svg>
+            )}
+
+            {!isBusy && (
+                <span className="flex items-center">
+                    {startIcon && <span className="flex items-center">{startIcon}</span>}
+                    {children}
+                    {endIcon && <span className="flex items-center">{endIcon}</span>}
+                </span>
+            )}
         </button>
     );
 };
