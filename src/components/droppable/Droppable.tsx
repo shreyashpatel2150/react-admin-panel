@@ -58,6 +58,12 @@ const Droppable: React.FC<DroppablePageProps> = ({ multiple = false, accept, onF
         setConfig(newConfig)
     }, [multiple])
 
+    const handleDeleteFile = (fileToDelete: AppFile) => {
+        const updatedFiles = selectedFiles.filter(file => file.uuid !== fileToDelete.uuid)
+        setSelectedFiles(updatedFiles)
+        onFileSelect(updatedFiles)
+    }
+
     const placeholder = multiple ? 'Browse Files' : 'Browse File'
 
     const uploadIcon = (
@@ -94,7 +100,7 @@ const Droppable: React.FC<DroppablePageProps> = ({ multiple = false, accept, onF
                     </div>
                     <div className="mb-4 flex items-center gap-3 overflow-x-auto">
                         {selectedFiles.length > 0 && selectedFiles.map((file) => {
-                            return <DroppableSelectedFile selectedFile={file} key={file.uuid} />
+                            return <DroppableSelectedFile selectedFile={file} key={file.uuid} onDelete={() => handleDeleteFile(file)} />
                         })}
                     </div>
                     {!selectedFiles.length && (
