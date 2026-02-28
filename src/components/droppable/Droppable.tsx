@@ -3,6 +3,8 @@ import { useDropzone, type Accept } from "react-dropzone"
 import { fileToTemplate } from "../../utils/misc";
 import { AppFile } from "../../classses/AppFile";
 import DroppableSelectedFile from "./DroppableSelectedFile";
+import { AppImage } from "../../classses/AppImage";
+import { commonFile } from "../../interfaces/Common";
 
 type DroppableProps = {
     onDrop: (acceptedFiles: File[]) => void,
@@ -13,16 +15,17 @@ type DroppableProps = {
 type DroppablePageProps = {
     multiple?: boolean,
     accept?: Accept,
-    onFileSelect: (files: AppFile[]) => void
+    onFileSelect: (files: commonFile[]) => void,
+    uploadedFiles?: commonFile[] | commonFile
 }
 
-const Droppable: React.FC<DroppablePageProps> = ({ multiple = false, accept, onFileSelect }) => {
-    const [selectedFiles, setSelectedFiles] = useState<AppFile[]>([])
+const Droppable: React.FC<DroppablePageProps> = ({ multiple = false, accept, onFileSelect, uploadedFiles }) => {
+    const [selectedFiles, setSelectedFiles] = useState<(commonFile)[]>([])
     
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
         try {
             // Convert all files in parallel and wait for all conversions to complete
-            const images: AppFile[] = await Promise.all(
+            const images: (AppFile | AppImage)[] = await Promise.all(
                 acceptedFiles.map((img) => fileToTemplate(img))
             );
 
@@ -58,8 +61,18 @@ const Droppable: React.FC<DroppablePageProps> = ({ multiple = false, accept, onF
         setConfig(newConfig)
     }, [multiple])
 
-    const handleDeleteFile = (fileToDelete: AppFile) => {
-        const updatedFiles = selectedFiles.filter(file => file.uuid !== fileToDelete.uuid)
+    useEffect(() => {
+        if (uploadedFiles) {
+            if (Array.isArray(uploadedFiles)) {
+                setSelectedFiles(uploadedFiles)
+            } else {
+                setSelectedFiles([uploadedFiles])
+            }
+        }
+    }, [uploadedFiles])
+
+    const handleDeleteFile = (fileToDelete: commonFile) => {
+        const updatedFiles = selectedFiles.filter(file => file?.uuid !== fileToDelete?.uuid)
         setSelectedFiles(updatedFiles)
         onFileSelect(updatedFiles)
     }
@@ -100,7 +113,7 @@ const Droppable: React.FC<DroppablePageProps> = ({ multiple = false, accept, onF
                     </div>
                     <div className="mb-4 flex items-center gap-3 overflow-x-auto">
                         {selectedFiles.length > 0 && selectedFiles.map((file) => {
-                            return <DroppableSelectedFile selectedFile={file} key={file.uuid} onDelete={() => handleDeleteFile(file)} />
+                            return <DroppableSelectedFile selectedFile={file} key={file?.uuid} onDelete={() => handleDeleteFile(file)} />
                         })}
                     </div>
                     {!selectedFiles.length && (

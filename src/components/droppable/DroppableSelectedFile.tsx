@@ -4,9 +4,10 @@ import { AppImage } from "../../classses/AppImage";
 import { fileIcons } from "../../consts";
 import { JSX } from "react";
 import { MdClose } from "react-icons/md";
+import { commonFile } from "../../interfaces/Common";
 
 type DroppableSelectedFileProps = {
-    selectedFile: AppImage | AppFile
+    selectedFile: commonFile
     onDelete?: () => void
 }
 

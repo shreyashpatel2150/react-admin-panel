@@ -14,3 +14,5 @@ export const fileIcons: Record<string, IconType> = {
     'powerpoint': FaFilePowerpoint,
     'file': FaFileAlt
 };
+
+export const appUrl = import.meta.env.VITE_APP_URL || '';

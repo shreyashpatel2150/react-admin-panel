@@ -15,9 +15,10 @@ const AppRoute = () => {
                 <AuthGuard><AppLayout /></AuthGuard>
             }>
                 <Route path="/" index element={<Dashboard />} />
-                <Route path="/user">
+                <Route path="/users">
                     <Route path="" index element={<User />} />
                     <Route path="create" element={<UserForm />} />
+                    <Route path="edit/:id" element={<UserForm />} />
                 </Route>
             </Route>
 

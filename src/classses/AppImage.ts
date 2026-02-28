@@ -1,3 +1,4 @@
+import { apiUrl } from '../utils/resources'
 import { AppFile, AppFileData } from './AppFile'
 import { get } from 'lodash-es'
 
@@ -68,8 +69,9 @@ export class AppImage extends AppFile {
 
     getSrc(size?: string): string {
         const timestamp = this.updatedAt.unix()
+
         return (
-            this.source || `${import.meta.env.VITE_APP_URL}/media/${this.id || this.uuid || 0}/image?t=${timestamp}${size ? `&size=${size}` : ''}`
+            this.source || apiUrl(`${import.meta.env.VITE_APP_URL}/media/${this.id || this.uuid || 0}/image?t=${timestamp}${size ? `&size=${size}` : ''}`)
         )
     }
 
@@ -116,6 +118,29 @@ export class AppImage extends AppFile {
                 return resolve(-1)
             }
             render.readAsArrayBuffer(file)
+        })
+    }
+
+    createFromFile(file: File): Promise<AppImage> {
+        return new Promise((resolve) => {
+            if (!file || !file.type.match('image.*')) {return resolve(this) }
+
+            this.file = file
+            this.filename = file.name
+            this.size = file.size
+            const render = new FileReader()
+            render.onload = () => {
+                const img = new Image()
+                img.onload = async () => {
+                    this.width = img.width
+                    this.height = img.height
+                    resolve(this)
+                }
+
+                img.src = (this.source = render.result as string)
+            }
+
+            render.readAsDataURL(file)
         })
     }
 }

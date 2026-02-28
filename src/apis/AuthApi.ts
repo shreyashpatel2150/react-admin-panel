@@ -1,5 +1,5 @@
 import { LoginResponse } from '../interfaces/LoginResponse';
-import api from './Api'
+import api from './api'
 
 type LoginRequest = { email: string; password: string }
 

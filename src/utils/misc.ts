@@ -1,20 +1,16 @@
 import { isFunction, isObjectLike } from 'lodash-es'
-import { AppFile, AppFileData } from '../classses/AppFile'
+import { AppFile } from '../classses/AppFile'
 import { AppImage } from '../classses/AppImage'
 import dayjs from 'dayjs'
+import { commonFile } from '../interfaces/Common'
 
-export function fileToTemplate(jsFile?: File | AppFileData): Promise<AppFile> {
-    if (!jsFile) {
-        return Promise.resolve(new AppFile())
+export function fileToTemplate(jsFile: File): Promise<AppFile | AppImage> {
+    if (jsFile.type.match (/^image\//)) {
+        const appImage =  new AppImage()
+        return appImage.createFromFile(jsFile)
+    } else {
+        return Promise.resolve(new AppFile(jsFile))
     }
-
-    const maybeType = (jsFile as File).type
-    if (typeof maybeType === 'string' && maybeType.match('image.*')) {
-        const appImage = new AppImage(jsFile as File)
-        return appImage.loadFile(jsFile as File)
-    }
-
-    return Promise.resolve(new AppFile(jsFile as AppFileData))
 }
 
 interface MediaObject {
@@ -40,7 +36,7 @@ export function attachToFormData(
         if ((valueToAttach as AppFile).file) {
             const file = (valueToAttach as AppFile).file
             if (file) {
-                formData.append(`${formDataKey}[file]`, file)
+                formData.append(`${formDataKey}`, file)
             }
             attachToFormData((valueToAttach as AppFile).customProperties, `${formDataKey}[custom_properties]`, formData)
         }
@@ -58,4 +54,19 @@ export function attachToFormData(
     }
 
     return formData
+}
+
+export function fileTemplateFromMedia(media: commonFile): AppFile | null {
+    if (!media) return null
+
+    if (media instanceof AppFile || media instanceof AppImage) {
+        return media
+    }
+
+    const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+    if (media.mime_type && imageMimeTypes.includes(media.mime_type)) {
+        return new AppImage(media)
+    }
+
+    return new AppFile(media)
 }
